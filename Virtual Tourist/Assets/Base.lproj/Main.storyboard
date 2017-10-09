@@ -71,9 +71,15 @@
                     </view>
                     <navigationItem key="navigationItem" title="Virtual Tourist" id="B1A-iR-XRy">
                         <barButtonItem key="backBarButtonItem" title="OK" id="EHs-hz-CPB"/>
+                        <barButtonItem key="rightBarButtonItem" title="Edit" style="plain" id="t06-1D-GCX">
+                            <connections>
+                                <action selector="edit:" destination="BYZ-38-t0r" id="lC2-jK-365"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="deleteAlert" destination="3IK-kj-XoJ" id="O0L-Z7-hsk"/>
+                        <outlet property="editButton" destination="t06-1D-GCX" id="pgg-Xe-bYQ"/>
                         <outlet property="mapView" destination="LpR-14-n1f" id="TyN-Os-Dzq"/>
                     </connections>
                 </viewController>

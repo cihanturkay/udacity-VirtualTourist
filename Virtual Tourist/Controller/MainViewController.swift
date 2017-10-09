@@ -14,6 +14,7 @@ class MainViewController: UIViewController {
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var deleteAlert: UIView!
+    @IBOutlet weak var editButton: UIBarButtonItem!
     
     var isDeleting: Bool = false
     var longPressRecogniser: UILongPressGestureRecognizer!
@@ -28,7 +29,7 @@ class MainViewController: UIViewController {
             fetchAllPins()
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -38,6 +39,7 @@ class MainViewController: UIViewController {
         isDeleting = false
         setUpGestureRecogniser()
         
+        
         let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
         fr.sortDescriptors = []
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
@@ -45,20 +47,22 @@ class MainViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .done, target: self, action: #selector(edit))
     }
     
-    @objc func edit(){
+    @IBAction func edit(_ sender: UIBarButtonItem) {
         if isDeleting {
             hideDeleteAlert()
+            self.editButton.title = "Edit"
         } else {
             showDeleteAlert()
+            self.editButton.title = "Done"
         }
     }
     
+    
     func showDeleteAlert() {
         isDeleting = true
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
             self.deleteAlert.frame.origin.y -= self.deleteAlert.frame.height
             self.mapView.frame.origin.y -= self.deleteAlert.frame.height
         }, completion: nil)
@@ -107,8 +111,8 @@ extension MainViewController: MKMapViewDelegate {
     
     func setUpGestureRecogniser() {
         longPressRecogniser = UILongPressGestureRecognizer(target: self, action: #selector(addAnnotation))
-            longPressRecogniser.minimumPressDuration = 1.0
-            mapView.addGestureRecognizer(longPressRecogniser)
+        longPressRecogniser.minimumPressDuration = 1.0
+        mapView.addGestureRecognizer(longPressRecogniser)
     }
     
     @objc func addAnnotation(gestureRecognizer: UIGestureRecognizer) {
@@ -126,15 +130,18 @@ extension MainViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        if isDeleting {
-            let toDelete = findPinFromAnnotation(annotation: view.annotation!)
-            self.stack.context.delete(toDelete!)
-            mapView.removeAnnotation(view.annotation!)
-            stack.save()
-        } else {
-            let albumController = self.storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
-            albumController.selectedPin = findPinFromAnnotation(annotation: view.annotation!)
-            navigationController!.pushViewController(albumController, animated: true)
+        if let annotation = view.annotation {
+            if isDeleting , let toDelete = findPinFromAnnotation(annotation: annotation){
+                self.stack.context.delete(toDelete)
+                mapView.removeAnnotation(annotation)
+                stack.save()
+            } else if !isDeleting {
+                let albumController = self.storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+                albumController.selectedPin = findPinFromAnnotation(annotation: annotation)
+                navigationController!.pushViewController(albumController, animated: true)
+            }
+            
+            mapView.deselectAnnotation(annotation, animated: true)
         }
     }
     
@@ -155,6 +162,11 @@ extension MainViewController: MKMapViewDelegate {
         stack.save()
     }
     
+    
+}
+
+extension MainViewController: NSFetchedResultsControllerDelegate {
+    
     func executeSearch() {
         if let fc = fetchedResultsController {
             do {
@@ -164,9 +176,6 @@ extension MainViewController: MKMapViewDelegate {
             }
         }
     }
-}
-
-extension MainViewController: NSFetchedResultsControllerDelegate {
     
 }
 

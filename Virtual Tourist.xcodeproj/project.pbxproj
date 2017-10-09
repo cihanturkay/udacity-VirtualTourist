@@ -19,6 +19,8 @@
 		0EEBCB791F8B8F7A00C671A5 /* Pin+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCB771F8B8F7A00C671A5 /* Pin+CoreDataClass.swift */; };
 		0EEBCB7A1F8B8F7A00C671A5 /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCB781F8B8F7A00C671A5 /* Pin+CoreDataProperties.swift */; };
 		0EEBCB7D1F8BA28100C671A5 /* CoreDataStackUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCB7C1F8BA28100C671A5 /* CoreDataStackUtil.swift */; };
+		0EEBCB811F8BC43300C671A5 /* FlickrConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCB801F8BC43300C671A5 /* FlickrConstants.swift */; };
+		0EEBCB831F8BC43F00C671A5 /* FlickerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCB821F8BC43F00C671A5 /* FlickerClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		0EEBCB771F8B8F7A00C671A5 /* Pin+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataClass.swift"; sourceTree = "<group>"; };
 		0EEBCB781F8B8F7A00C671A5 /* Pin+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pin+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		0EEBCB7C1F8BA28100C671A5 /* CoreDataStackUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStackUtil.swift; sourceTree = "<group>"; };
+		0EEBCB801F8BC43300C671A5 /* FlickrConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrConstants.swift; sourceTree = "<group>"; };
+		0EEBCB821F8BC43F00C671A5 /* FlickerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +125,8 @@
 		0EEBCB7F1F8BB4DC00C671A5 /* Client */ = {
 			isa = PBXGroup;
 			children = (
+				0EEBCB801F8BC43300C671A5 /* FlickrConstants.swift */,
+				0EEBCB821F8BC43F00C671A5 /* FlickerClient.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -203,8 +209,10 @@
 				0EEBCB791F8B8F7A00C671A5 /* Pin+CoreDataClass.swift in Sources */,
 				0EEBCB7D1F8BA28100C671A5 /* CoreDataStackUtil.swift in Sources */,
 				0EEBCB521F8B7F2700C671A5 /* VirtualTourist.xcdatamodeld in Sources */,
+				0EEBCB811F8BC43300C671A5 /* FlickrConstants.swift in Sources */,
 				0EEBCB481F87D76100C671A5 /* DetailViewController.swift in Sources */,
 				0EEBCB381F87CAD500C671A5 /* MainViewController.swift in Sources */,
+				0EEBCB831F8BC43F00C671A5 /* FlickerClient.swift in Sources */,
 				0EEBCB361F87CAD500C671A5 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

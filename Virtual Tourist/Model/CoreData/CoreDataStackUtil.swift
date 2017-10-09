@@ -73,6 +73,8 @@ struct CoreDataStack {
         } catch {
             print("unable to add store at \(dbURL)")
         }
+        
+        print(dbURL)
     }
     
     // MARK: Utils
