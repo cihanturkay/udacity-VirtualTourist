@@ -62,12 +62,12 @@ class DetailViewController: UIViewController {
             stack.context.delete(photo)
         }
         selectedPin.page = selectedPin.page + 1
-        stack.save()
         FlickerClient.sharedInstance().getImagesFromFlicker(selectedPin) { (error) in
             if let error = error {
                 print(error)
             } else {
-                print("succesfuly get the images")               
+                print("succesfuly get the images")
+                self.stack.save()
                 self.executeSearch()
                 self.collectionView.reloadData()
                 self.newCollectionButton.isEnabled = true
@@ -114,6 +114,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 }else if let image = image {
                     print("image downloaded")
                     cell.imageView.image = image
+                    self.stack.save()
                 }
             })
         }
@@ -130,6 +131,7 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
         if let photo = fetchedResultsController.object(at: indexPath) as? Photo, let _ = photo.imageData {
             print("photo will be removed \(String(describing: photo.url))")
             self.stack.context.delete(photo)
+            self.stack.save()
         }
     }
     
