@@ -148,7 +148,11 @@
                                 </constraints>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="huP-c6-acd"/>
-                                    <barButtonItem title="New Collection" id="73Y-B2-7zk"/>
+                                    <barButtonItem title="New Collection" id="73Y-B2-7zk">
+                                        <connections>
+                                            <action selector="newCollection:" destination="qPB-Zu-wbl" id="9Wa-3U-Aj9"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="aZW-iS-Vsm"/>
                                 </items>
                             </toolbar>
@@ -171,6 +175,7 @@
                     <connections>
                         <outlet property="collectionView" destination="o4S-ds-5PD" id="EKU-Y8-rG2"/>
                         <outlet property="mapView" destination="HQu-hd-vwL" id="EUv-qK-LKF"/>
+                        <outlet property="newCollectionButton" destination="73Y-B2-7zk" id="hgw-KM-rEN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yji-gr-YSJ" userLabel="First Responder" sceneMemberID="firstResponder"/>

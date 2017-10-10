@@ -19,9 +19,9 @@ class DetailViewController: UIViewController {
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var newCollectionButton: UIBarButtonItem!
     
     var selectedPin: Pin!
-    
     
     var fetchedResultsController : NSFetchedResultsController<NSFetchRequestResult>! {
         didSet {
@@ -29,12 +29,15 @@ class DetailViewController: UIViewController {
             executeSearch()
             if fetchedResultsController.fetchedObjects?.count == 0 {
                 getPhotosFromFlicker()
+            } else {
+                newCollectionButton.isEnabled = true
             }
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        newCollectionButton.isEnabled = false
         collectionView.delegate = self
         collectionView.dataSource = self
         let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Photo")
@@ -46,6 +49,11 @@ class DetailViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         centerMapOnLocation()
+    }
+    
+    @IBAction func newCollection(_ sender: UIBarButtonItem) {
+        newCollectionButton.isEnabled = false
+        getPhotosFromFlicker()
     }
     
     private func getPhotosFromFlicker(){
@@ -62,6 +70,7 @@ class DetailViewController: UIViewController {
                 print("succesfuly get the images")               
                 self.executeSearch()
                 self.collectionView.reloadData()
+                self.newCollectionButton.isEnabled = true
             }
         }
     }
