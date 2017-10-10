@@ -71,7 +71,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Virtual Tourist" id="B1A-iR-XRy">
                         <barButtonItem key="backBarButtonItem" title="OK" id="EHs-hz-CPB"/>
-                        <barButtonItem key="rightBarButtonItem" title="Edit" style="plain" id="t06-1D-GCX">
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="t06-1D-GCX">
                             <connections>
                                 <action selector="edit:" destination="BYZ-38-t0r" id="lC2-jK-365"/>
                             </connections>

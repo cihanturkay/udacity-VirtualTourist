@@ -26,13 +26,4 @@ public class Photo: NSManagedObject {
         self.pin = pin
         
     }
-    
-    static func photosFromResult(_ results: [[String:AnyObject]],  context: NSManagedObjectContext, _ pin: Pin) -> [Photo] {
-        
-        var photos = [Photo]()
-        
-       
-        
-        return photos
-    }
 }
