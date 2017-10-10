@@ -111,13 +111,33 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="photo" id="W78-Ef-Bqh">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="photo" id="W78-Ef-Bqh" customClass="PhotoCollectionViewCell" customModule="Virtual_Tourist" customModuleProvider="target">
                                         <rect key="frame" x="62.5" y="0.0" width="250" height="250"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="250" height="250"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="PH8-BB-mhs">
+                                                    <rect key="frame" x="114.5" y="115" width="20" height="20"/>
+                                                </activityIndicatorView>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3FR-Xt-dMi">
+                                                    <rect key="frame" x="0.0" y="0.0" width="250" height="250"/>
+                                                </imageView>
+                                            </subviews>
                                         </view>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="3FR-Xt-dMi" secondAttribute="trailing" id="MEy-dQ-O1h"/>
+                                            <constraint firstItem="3FR-Xt-dMi" firstAttribute="leading" secondItem="W78-Ef-Bqh" secondAttribute="leading" id="Z6Q-7Z-87m"/>
+                                            <constraint firstItem="PH8-BB-mhs" firstAttribute="centerY" secondItem="3FR-Xt-dMi" secondAttribute="centerY" id="f3O-uE-nd6"/>
+                                            <constraint firstItem="3FR-Xt-dMi" firstAttribute="top" secondItem="W78-Ef-Bqh" secondAttribute="top" id="jNr-H1-QUg"/>
+                                            <constraint firstAttribute="bottom" secondItem="3FR-Xt-dMi" secondAttribute="bottom" id="ooh-Lh-rPL"/>
+                                            <constraint firstItem="PH8-BB-mhs" firstAttribute="centerX" secondItem="3FR-Xt-dMi" secondAttribute="centerX" id="xsq-1m-mAl"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="imageView" destination="3FR-Xt-dMi" id="aMs-40-Xv2"/>
+                                            <outlet property="indicator" destination="PH8-BB-mhs" id="0eI-te-zeN"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>

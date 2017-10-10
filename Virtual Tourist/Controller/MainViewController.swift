@@ -155,7 +155,7 @@ extension MainViewController: MKMapViewDelegate {
     }
     
     func addAnnotationToCoreData(point: MKPointAnnotation){
-        _ = Pin.init(Double(point.coordinate.latitude), Double(point.coordinate.longitude), 1, context: self.stack.context)
+        _ = Pin.init(Double(point.coordinate.latitude), Double(point.coordinate.longitude), 0, context: self.stack.context)
         stack.save()
     }
     

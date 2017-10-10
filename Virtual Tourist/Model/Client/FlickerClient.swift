@@ -21,7 +21,7 @@ class FlickerClient: NSObject {
     
     // MARK: GET STUDENT LOCATIONS
     
-    func getImagesFromFlicker(_ pin:Pin, _ completionHandler: @escaping (_ photos: [Photo]?, _ error: NSError?) -> Void) {
+    func getImagesFromFlicker(_ pin:Pin, _ completionHandler: @escaping (_ error: NSError?) -> Void) {
         
         let parameters = [
             FlickerClient.FlickrParameterKeys.Method: FlickerClient.FlickrParameterValues.SearchPhotoMethod,
@@ -41,21 +41,53 @@ class FlickerClient: NSObject {
             if let error = error {
                 print(error)
                 DispatchQueue.main.async {
-                    completionHandler(nil, error)
+                    completionHandler(error)
                 }
             } else {
                 if let photos = results?[FlickerClient.FlickrResponseKeys.Photos] as? [String:AnyObject], let photoArray = photos[FlickerClient.FlickrResponseKeys.Photo] as? [[String:AnyObject]] {
-                    let flickerPhotoList = Photo.photosFromResult(photoArray, context: self.stack.context, pin)
-                    DispatchQueue.main.async {
-                       completionHandler(flickerPhotoList, error)
+                    self.stack.performBackgroundBatchOperation { (batch) in
+                        for result in photoArray {
+                            _ = Photo.init(dictionary: result, context: self.stack.context , pin: pin)
+                        }                       
+                        DispatchQueue.main.async {
+                            completionHandler(nil)
+                        }
                     }
                 } else {
                     print("Couldn't parse locations")
                     DispatchQueue.main.async {
-                        completionHandler(nil, NSError(domain: "getStudentLocations parsing", code: 1, userInfo: [NSLocalizedDescriptionKey: "Could not parse getStudentLocations"]))
+                        completionHandler(NSError(domain: "getImagesFromFlicker parsing", code: 1, userInfo: [NSLocalizedDescriptionKey: "Could not parse getImagesFromFlicker"]))
                     }
                 }
             }
+        }
+    }
+    
+    func downloadAndSaveImage(photo: Photo, _ completionHandler: @escaping (_ image:UIImage?, _ error: NSError?) -> Void) {
+        if let url = photo.url {
+            let request = NSMutableURLRequest(url: NSURL(string: url)! as URL)
+            let task = session.dataTask(with: request as URLRequest) { data, response, error in
+                guard error == nil else {
+                    let userInfo = [NSLocalizedDescriptionKey : "Couldn't download image"]
+                    completionHandler(nil, NSError(domain: "downloadAndSaveImage", code: 1, userInfo: userInfo))
+                    return
+                }
+                
+                guard let data = data else {
+                    let userInfo = [NSLocalizedDescriptionKey : "Couldn't download image"]
+                    completionHandler(nil, NSError(domain: "downloadAndSaveImage", code: 1, userInfo: userInfo))
+                    return
+                }
+                
+                self.stack.performBackgroundBatchOperation{ (batch) in
+                    photo.imageData = data as NSData
+                    DispatchQueue.main.async {
+                        completionHandler(UIImage(data: data),nil)
+                    }
+                }
+            }
+            
+            task.resume()
         }
     }
     

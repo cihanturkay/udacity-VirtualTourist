@@ -21,6 +21,7 @@
 		0EEBCB7D1F8BA28100C671A5 /* CoreDataStackUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCB7C1F8BA28100C671A5 /* CoreDataStackUtil.swift */; };
 		0EEBCB811F8BC43300C671A5 /* FlickrConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCB801F8BC43300C671A5 /* FlickrConstants.swift */; };
 		0EEBCB831F8BC43F00C671A5 /* FlickerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCB821F8BC43F00C671A5 /* FlickerClient.swift */; };
+		0EEBCB871F8CD39F00C671A5 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCB861F8CD39F00C671A5 /* PhotoCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		0EEBCB7C1F8BA28100C671A5 /* CoreDataStackUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStackUtil.swift; sourceTree = "<group>"; };
 		0EEBCB801F8BC43300C671A5 /* FlickrConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrConstants.swift; sourceTree = "<group>"; };
 		0EEBCB821F8BC43F00C671A5 /* FlickerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerClient.swift; sourceTree = "<group>"; };
+		0EEBCB861F8CD39F00C671A5 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,7 @@
 			children = (
 				0EEBCB371F87CAD500C671A5 /* MainViewController.swift */,
 				0EEBCB471F87D76100C671A5 /* DetailViewController.swift */,
+				0EEBCB861F8CD39F00C671A5 /* PhotoCollectionViewCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -208,6 +211,7 @@
 				0EEBCB751F8B8F6100C671A5 /* Photo+CoreDataClass.swift in Sources */,
 				0EEBCB791F8B8F7A00C671A5 /* Pin+CoreDataClass.swift in Sources */,
 				0EEBCB7D1F8BA28100C671A5 /* CoreDataStackUtil.swift in Sources */,
+				0EEBCB871F8CD39F00C671A5 /* PhotoCollectionViewCell.swift in Sources */,
 				0EEBCB521F8B7F2700C671A5 /* VirtualTourist.xcdatamodeld in Sources */,
 				0EEBCB811F8BC43300C671A5 /* FlickrConstants.swift in Sources */,
 				0EEBCB481F87D76100C671A5 /* DetailViewController.swift in Sources */,

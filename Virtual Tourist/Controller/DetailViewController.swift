@@ -54,11 +54,11 @@ class DetailViewController: UIViewController {
         }
         selectedPin.page = selectedPin.page + 1
         stack.save()
-        FlickerClient.sharedInstance().getImagesFromFlicker(selectedPin) { (photos, error) in
+        FlickerClient.sharedInstance().getImagesFromFlicker(selectedPin) { (error) in
             if let error = error {
                 print(error)
             } else {
-                print("succesfuly get the images")
+                print("succesfuly get the images")               
                 self.executeSearch()
                 self.collectionView.reloadData()
             }
@@ -88,8 +88,27 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photo", for: indexPath)
-        cell.backgroundColor = UIColor.black
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photo", for: indexPath) as! PhotoCollectionViewCell
+        let photo = fetchedResultsController.object(at: indexPath) as! Photo
+        cell.backgroundColor = UIColor.lightGray
+      
+        
+        if let imageData = photo.imageData {
+            print("image already downloaded")
+            cell.imageView.image = UIImage(data: imageData as Data)
+        } else {
+            cell.indicator.startAnimating()
+            FlickerClient.sharedInstance().downloadAndSaveImage(photo: photo, { (image, error) in
+                cell.indicator.stopAnimating()
+                if let _ = error {
+                    cell.backgroundColor = UIColor.black
+                    print("image downloaded error")
+                }else if let image = image {
+                    print("image downloaded")
+                    cell.imageView.image = image
+                }
+            })
+        }
         return cell
     }
     

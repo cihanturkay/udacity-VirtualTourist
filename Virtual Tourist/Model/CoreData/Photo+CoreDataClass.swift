@@ -31,9 +31,7 @@ public class Photo: NSManagedObject {
         
         var photos = [Photo]()
         
-        for result in results {
-            photos.append(Photo.init(dictionary: result, context: context , pin: pin))
-        }
+       
         
         return photos
     }
