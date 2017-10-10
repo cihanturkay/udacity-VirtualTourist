@@ -12,11 +12,15 @@ import CoreData
 
 class DetailViewController: UIViewController {
     
+    fileprivate let itemsPerRow: CGFloat = 3.0
+    fileprivate let sectionInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)
+    fileprivate let stack = (UIApplication.shared.delegate as! AppDelegate).stack
+    
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var collectionView: UICollectionView!
     
     var selectedPin: Pin!
-    let stack = (UIApplication.shared.delegate as! AppDelegate).stack
+   
     
     var fetchedResultsController : NSFetchedResultsController<NSFetchRequestResult>! {
         didSet {
@@ -30,6 +34,8 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        collectionView.delegate = self
+        collectionView.dataSource = self
         let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Photo")
         fr.sortDescriptors = []
         fr.predicate = NSPredicate(format: "pin = %@", argumentArray: [self.selectedPin])
@@ -53,6 +59,8 @@ class DetailViewController: UIViewController {
                 print(error)
             } else {
                 print("succesfuly get the images")
+                self.executeSearch()
+                self.collectionView.reloadData()
             }
         }
     }
@@ -68,22 +76,21 @@ class DetailViewController: UIViewController {
     }
 }
 
-extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return fetchedResultsController.sections?.count ?? 0
+        return 1
     }
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let sectionInfo = fetchedResultsController.sections![section]
-        return sectionInfo.numberOfObjects
+        return fetchedResultsController.fetchedObjects?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        //TODO Add collection view
-        return collectionView.dequeueReusableCell(withReuseIdentifier: "photo", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photo", for: indexPath)
+        cell.backgroundColor = UIColor.black
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -92,6 +99,21 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
         stack.save()
     }
     
+    //MARK:FLow layout
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
+        let availableWidth = collectionView.frame.width - paddingSpace
+        let widthPerItem = availableWidth / itemsPerRow
+        return CGSize(width: widthPerItem, height: widthPerItem)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return sectionInsets
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return sectionInsets.left
+    }
 }
 
 extension DetailViewController: NSFetchedResultsControllerDelegate {
