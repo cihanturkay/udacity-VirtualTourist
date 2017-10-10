@@ -16,11 +16,11 @@ class MainViewController: UIViewController {
     @IBOutlet weak var deleteAlert: UIView!
     @IBOutlet weak var editButton: UIBarButtonItem!
     
-    var isDeleting: Bool = false
-    var longPressRecogniser: UILongPressGestureRecognizer!
-    let stack = (UIApplication.shared.delegate as! AppDelegate).stack
+    fileprivate var isDeleting: Bool = false
+    fileprivate var longPressRecogniser: UILongPressGestureRecognizer!
+    fileprivate let stack = (UIApplication.shared.delegate as! AppDelegate).stack
     
-    var fetchedResultsController : NSFetchedResultsController<NSFetchRequestResult>! {
+    fileprivate var fetchedResultsController : NSFetchedResultsController<NSFetchRequestResult>! {
         didSet {
             // Whenever the frc changes, we execute the search and
             // reload the map
@@ -36,7 +36,6 @@ class MainViewController: UIViewController {
         mapView.delegate = self
         isDeleting = false
         setUpGestureRecogniser()
-        
         
         let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
         fr.sortDescriptors = []

@@ -38,6 +38,7 @@ class DetailViewController: UIViewController {
         collectionView.dataSource = self
         let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Photo")
         fr.sortDescriptors = []
+        fr.predicate = NSPredicate(format: "pin = %@", argumentArray: [self.selectedPin])
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
     }
     
@@ -91,11 +92,13 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let photo = fetchedResultsController.object(at: indexPath) as! Photo
         cell.backgroundColor = UIColor.lightGray
       
+        
         if let imageData = photo.imageData {
             //print("image already downloaded")
             cell.imageView.image = UIImage(data: imageData as Data)
         } else {
             cell.indicator.startAnimating()
+            cell.imageView.image = nil
             FlickerClient.sharedInstance().downloadAndSaveImage(photo: photo, { (image, error) in
                 cell.indicator.stopAnimating()
                 if let _ = error {
