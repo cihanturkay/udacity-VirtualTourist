@@ -15,12 +15,13 @@ class DetailViewController: UIViewController {
     fileprivate let itemsPerRow: CGFloat = 3.0
     fileprivate let sectionInsets = UIEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)
     fileprivate let stack = (UIApplication.shared.delegate as! AppDelegate).stack
+    fileprivate var itemChanges = [(type: NSFetchedResultsChangeType, indexPath: IndexPath?, newIndexPath: IndexPath?)]()
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var collectionView: UICollectionView!
     
     var selectedPin: Pin!
-   
+    
     
     var fetchedResultsController : NSFetchedResultsController<NSFetchRequestResult>! {
         didSet {
@@ -82,7 +83,6 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
         return 1
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return fetchedResultsController.fetchedObjects?.count ?? 0
     }
@@ -91,8 +91,6 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photo", for: indexPath) as! PhotoCollectionViewCell
         let photo = fetchedResultsController.object(at: indexPath) as! Photo
         cell.backgroundColor = UIColor.lightGray
-      
-        
         if let imageData = photo.imageData {
             //print("image already downloaded")
             cell.imageView.image = UIImage(data: imageData as Data)
@@ -117,6 +115,13 @@ extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let photo = fetchedResultsController.object(at: indexPath) as! Photo
         self.stack.context.delete(photo)
         stack.save()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if let photo = fetchedResultsController.object(at: indexPath) as? Photo, let _ = photo.imageData {
+            print("photo will be removed \(String(describing: photo.url))")
+            self.stack.context.delete(photo)
+        }
     }
     
     //MARK:FLow layout
@@ -148,4 +153,25 @@ extension DetailViewController: NSFetchedResultsControllerDelegate {
         }
     }
     
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        itemChanges.append((type, indexPath, newIndexPath))
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        collectionView?.performBatchUpdates({
+            for change in self.itemChanges {
+                switch change.type {
+                case .insert: self.collectionView?.insertItems(at: [change.newIndexPath!])
+                case .delete: self.collectionView?.deleteItems(at: [change.indexPath!])
+                case .update: self.collectionView?.reloadItems(at: [change.indexPath!])
+                case .move:
+                    self.collectionView?.deleteItems(at: [change.indexPath!])
+                    self.collectionView?.insertItems(at: [change.newIndexPath!])
+                }
+            }
+            
+        }, completion: { finished in
+            self.itemChanges.removeAll()
+        })
+    }
 }
