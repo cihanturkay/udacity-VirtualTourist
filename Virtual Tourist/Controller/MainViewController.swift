@@ -33,8 +33,6 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("view did load main")
-        
         mapView.delegate = self
         isDeleting = false
         setUpGestureRecogniser()
@@ -89,21 +87,16 @@ class MainViewController: UIViewController {
     }
     
     func findPinFromAnnotation(annotation: MKAnnotation) -> Pin? {
+        let fr = NSFetchRequest<NSFetchRequestResult>(entityName: "Pin")
+        fr.sortDescriptors = []
+        fr.predicate = NSPredicate(format: "longitude == %lf AND latitude == %lf", Double(annotation.coordinate.longitude), Double(annotation.coordinate.latitude))
+        let tempFetchController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
         do {
-            try fetchedResultsController.performFetch()
-        } catch {
-            print(error)
+            try tempFetchController.performFetch()
+        } catch let e as NSError {
+            print("Error while trying to perform a search: \n\(e)\n\(tempFetchController)")
         }
-        let pins = fetchedResultsController.fetchedObjects as! [Pin]
-        let lat = annotation.coordinate.latitude
-        let long = annotation.coordinate.longitude
-        let filtered = pins.filter({ $0.latitude == lat && $0.longitude == long  })
-        guard filtered.first != nil else {
-            print("Did not find")
-            return nil
-        }
-        return filtered.first
-        
+        return tempFetchController.fetchedObjects?.first as? Pin
     }
 }
 
@@ -136,9 +129,13 @@ extension MainViewController: MKMapViewDelegate {
                 mapView.removeAnnotation(annotation)
                 stack.save()
             } else if !isDeleting {
-                let albumController = self.storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
-                albumController.selectedPin = findPinFromAnnotation(annotation: annotation)
-                navigationController!.pushViewController(albumController, animated: true)
+                print("annotation \(annotation.coordinate)")
+                if let pin = findPinFromAnnotation(annotation: annotation) {
+                    let albumController = self.storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+                    albumController.selectedPin = pin
+                    navigationController!.pushViewController(albumController, animated: true)
+                }
+                
             }
             
             mapView.deselectAnnotation(annotation, animated: true)
@@ -158,7 +155,7 @@ extension MainViewController: MKMapViewDelegate {
     }
     
     func addAnnotationToCoreData(point: MKPointAnnotation){
-        _ = Pin.init(point.coordinate.latitude, point.coordinate.longitude, 1, context: self.stack.context)
+        _ = Pin.init(Double(point.coordinate.latitude), Double(point.coordinate.longitude), 1, context: self.stack.context)
         stack.save()
     }
     

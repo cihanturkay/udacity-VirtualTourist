@@ -12,6 +12,9 @@ import CoreData
 
 class DetailViewController: UIViewController {
     
+    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     var selectedPin: Pin!
     let stack = (UIApplication.shared.delegate as! AppDelegate).stack
     
@@ -33,8 +36,9 @@ class DetailViewController: UIViewController {
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fr, managedObjectContext: stack.context, sectionNameKeyPath: nil, cacheName: nil)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        centerMapOnLocation()
     }
     
     private func getPhotosFromFlicker(){
@@ -53,8 +57,15 @@ class DetailViewController: UIViewController {
         }
     }
     
-    
-    
+    func centerMapOnLocation() {
+        let regionRadius: CLLocationDistance = 1000
+        let coordinate:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: selectedPin.latitude, longitude: selectedPin.longitude)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(coordinate, regionRadius * 2.0, regionRadius * 2.0)
+        mapView.setRegion(coordinateRegion, animated: true)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        mapView.addAnnotation(annotation)
+    }
 }
 
 extension DetailViewController: UICollectionViewDelegate, UICollectionViewDataSource {
